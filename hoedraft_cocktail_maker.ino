@@ -48,7 +48,7 @@ void loop() {
         makeHooidriftSpecialCocktail();
         break;
       case 4: 
-        makeFlushCocktail();
+        makeHooidriftSpecialCocktail();
         break;
     }
     makeCocktail();
@@ -153,30 +153,6 @@ void makeHooidriftSpecialCocktail() {
     stopMakingCocktails();
     for (int i = 0; i < 4; i++)
       bottleDurations[i] = 0;
-  }
-}
-
-
-void makeFlushCocktail() {
-  if (cocktailDuration == 0) {
-    cocktailDuration = 3000;
-  }
-  unsigned long now = millis();
-
-  
-  digitalWrite(10, HIGH);
-  digitalWrite(11, HIGH);
-  digitalWrite(12, HIGH);
-  digitalWrite(13, HIGH);
-
-  
-  if (now - startTime > cocktailDuration) {
-    stopMakingCocktails();
-    
-    digitalWrite(10, LOW);
-    digitalWrite(11, LOW);
-    digitalWrite(12, LOW);
-    digitalWrite(13, LOW);
   }
 }
 
