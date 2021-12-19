@@ -36,16 +36,16 @@ void loop() {
   if (isMakingCocktail) {
     switch (index) {
       case 0: 
-        makeHooidriftSpecialCocktail();
+        makeTemplateCocktail();
         break;
       case 1: 
-        makeHooidriftSpecialCocktail();
+        makeTemplateCocktail();
         break;
       case 2: 
-        makeHooidriftSpecialCocktail();
+        makeTemplateCocktail();
         break;
       case 3: 
-        makeHooidriftSpecialCocktail();
+        makeTemplateCocktail();
         break;
       case 4: 
         makeHooidriftSpecialCocktail();
@@ -115,6 +115,37 @@ void makeCocktail() {
 
   if (now - previousTime > flashInterval) {
     isSelectedLampOn = !isSelectedLampOn;
+  }
+}
+
+
+void makeTemplateCocktail() {
+  const unsigned int durationBottleOne = 500;
+  const unsigned int durationBottleTwo = 500;
+  const unsigned int durationBottleThree = 1750;
+  const unsigned int durationBottleFour = 250;
+  
+  if (cocktailDuration == 0) {
+    cocktailDuration = durationBottleOne + durationBottleTwo + durationBottleThree + durationBottleFour;
+  }
+  unsigned long now = millis();
+
+  
+  if (now - startTime > durationBottleOne) digitalWrite(10, LOW);
+  else digitalWrite(10, HIGH);
+
+  if (now - startTime < durationBottleOne || now - startTime > durationBottleTwo) digitalWrite(11, LOW);
+  else digitalWrite(11, HIGH);
+
+  if (now - startTime < durationBottleTwo || now - startTime > durationBottleThree) digitalWrite(12, LOW);
+  else digitalWrite(12, HIGH);
+
+  if (now - startTime < durationBottleThree || now - startTime > durationBottleFour) digitalWrite(13, LOW);
+  else digitalWrite(13, HIGH);
+
+  
+  if (now - startTime > cocktailDuration) {
+    stopMakingCocktails();
   }
 }
 
