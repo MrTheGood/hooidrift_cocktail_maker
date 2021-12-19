@@ -20,23 +20,60 @@ void setup() {
 
 int index = 0;
 bool isButtonUpPressed = false;
+bool isButtonDownPressed = false;
+bool isButtonSelectPressed = false;
+
+bool isMakingCocktail = false;
+int tmp = 0;
 
 
 void loop() {
-  digitalWrite(index + 5, LOW);
 
-  
-  int buttonUpValue = digitalRead(BUTTON_UP);
+  if (isMakingCocktail) {
+    if (tmp % 2 == 0) digitalWrite(index + 5, HIGH);
+    else digitalWrite(index + 5, LOW);
+    tmp++;
 
-  if (buttonUpValue == HIGH) {
-    if (!isButtonUpPressed) {
-      isButtonUpPressed = true;
-      index = (index + 1) % 5;
+    if (tmp >= 500) {
+      tmp = 0;
+      isMakingCocktail = false;
     }
-  } else isButtonUpPressed = false;
+  } else {
+    digitalWrite(index + 5, LOW);
+
   
+    int buttonUpValue = digitalRead(BUTTON_UP);
+    if (buttonUpValue == HIGH) {
+      if (!isButtonUpPressed) {
+        isButtonUpPressed = true;
+        index = (index + 1) % 5;
+      }
+    } else isButtonUpPressed = false;
+  
+    
+    int buttonDownValue = digitalRead(BUTTON_DOWN);
+    if (buttonDownValue == HIGH) {
+      if (!isButtonDownPressed) {
+        isButtonDownPressed = true;
+        index = (index - 1) % 5;
+        if (index == -1) index = 4;
+      }
+    } else isButtonDownPressed = false;
+  
+    
+    int buttonSelectValue = digitalRead(BUTTON_SELECT);
+    if (buttonSelectValue == HIGH) {
+      if (!isButtonSelectPressed) {
+        isButtonSelectPressed = true;
+        isMakingCocktail = true;
+      }
+    } else isButtonSelectPressed = false;
+
+    
+    digitalWrite(index + 5, HIGH);
+  }
 
 
-  digitalWrite(index + 5, HIGH);
+
   delay(20);
 }
