@@ -101,7 +101,7 @@ void selection() {
 
 
 void makeCocktail() {
-  const long flashInterval = 250;
+  const long flashInterval = 1000;
 
   
   static unsigned long previousTime = 0;
@@ -120,20 +120,45 @@ void makeCocktail() {
 
 
 void makeHooidriftSpecialCocktail() {
-  if (cocktailDuration = 0) {
-    cocktailDuration = 1000;
-  }
+  static unsigned int bottleCount = 0;
+  static int bottleDurations[4] = {0,0,0,0};
   
+  if (cocktailDuration == 0) {
+    bottleCount = random(1, 5);
+
+    for (int i = 0; i < bottleCount; i++) {
+      unsigned int selectedBottle = random(0, 4);
+      while (bottleDurations[selectedBottle] != 0) {
+        selectedBottle = random(0, 4);
+      }
+
+     
+      int duration = random(500, 2500);
+      bottleDurations[selectedBottle] = duration;
+    
+      if (duration > cocktailDuration)
+        cocktailDuration = duration;
+    }
+  }
   unsigned long now = millis();
+
+  for (int i = 0; i < 4; i++) {
+    int duration = bottleDurations[i];
+    if (now - startTime > duration) digitalWrite(i+10, LOW);
+    else digitalWrite(i+10, HIGH);
+  }
+
   
   if (now - startTime > cocktailDuration) {
     stopMakingCocktails();
+    for (int i = 0; i < 4; i++)
+      bottleDurations[i] = 0;
   }
 }
 
 
 void makeFlushCocktail() {
-  if (cocktailDuration = 0) {
+  if (cocktailDuration == 0) {
     cocktailDuration = 3000;
   }
   unsigned long now = millis();
