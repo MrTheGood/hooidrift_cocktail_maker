@@ -15,18 +15,44 @@ void setup() {
   pinMode(7, OUTPUT);
   pinMode(8, OUTPUT);
   pinMode(9, OUTPUT);
+
+  // Pumps
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
+  pinMode(12, OUTPUT);
+  pinMode(13, OUTPUT);
 }
 
 
 signed int index = 0;
+const signed int INDEX_OFFSET = 5;
+
 unsigned long startTime = 0;
+unsigned long cocktailDuration = 0;
 bool isMakingCocktail = false;
 
 
 void loop() {
-  
-  if (isMakingCocktail) makeCocktail();
-  else selection();
+  if (isMakingCocktail) {
+    switch (index) {
+      case 0: 
+        makeHooidriftSpecialCocktail();
+        break;
+      case 1: 
+        makeHooidriftSpecialCocktail();
+        break;
+      case 2: 
+        makeHooidriftSpecialCocktail();
+        break;
+      case 3: 
+        makeHooidriftSpecialCocktail();
+        break;
+      case 4: 
+        makeFlushCocktail();
+        break;
+    }
+    makeCocktail();
+  } else selection();
 
   delay(20);
 }
@@ -38,7 +64,7 @@ void selection() {
   static bool isButtonSelectPressed = false;
 
   
-  digitalWrite(index + 5, LOW);
+  digitalWrite(index + INDEX_OFFSET, LOW);
   
   
   int buttonUpValue = digitalRead(BUTTON_UP);
@@ -70,13 +96,12 @@ void selection() {
   } else isButtonSelectPressed = false;
   
   
-  digitalWrite(index + 5, HIGH);
+  digitalWrite(index + INDEX_OFFSET, HIGH);
 }
 
 
 void makeCocktail() {
   const long flashInterval = 250;
-  const long cocktailDuration = 2500;
 
   
   static unsigned long previousTime = 0;
@@ -85,15 +110,53 @@ void makeCocktail() {
   
   unsigned long now = millis();
   
-  if (isSelectedLampOn) digitalWrite(index + 5, HIGH);
-  else digitalWrite(index + 5, LOW);
+  if (isSelectedLampOn) digitalWrite(index + INDEX_OFFSET, HIGH);
+  else digitalWrite(index + INDEX_OFFSET, LOW);
 
   if (now - previousTime > flashInterval) {
     isSelectedLampOn = !isSelectedLampOn;
   }
+}
+
+
+void makeHooidriftSpecialCocktail() {
+  if (cocktailDuration = 0) {
+    cocktailDuration = 1000;
+  }
+  
+  unsigned long now = millis();
   
   if (now - startTime > cocktailDuration) {
-    isMakingCocktail = false;
-    startTime = 0;
+    stopMakingCocktails();
   }
+}
+
+
+void makeFlushCocktail() {
+  if (cocktailDuration = 0) {
+    cocktailDuration = 3000;
+  }
+  unsigned long now = millis();
+
+  
+  digitalWrite(10, HIGH);
+  digitalWrite(11, HIGH);
+  digitalWrite(12, HIGH);
+  digitalWrite(13, HIGH);
+
+  
+  if (now - startTime > cocktailDuration) {
+    stopMakingCocktails();
+    
+    digitalWrite(10, LOW);
+    digitalWrite(11, LOW);
+    digitalWrite(12, LOW);
+    digitalWrite(13, LOW);
+  }
+}
+
+void stopMakingCocktails() {
+  cocktailDuration = 0;
+  isMakingCocktail = false;
+  startTime = 0;
 }
