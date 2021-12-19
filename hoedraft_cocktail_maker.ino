@@ -130,18 +130,22 @@ void makeTemplateCocktail() {
   }
   unsigned long now = millis();
 
-  
-  if (now - startTime > durationBottleOne) digitalWrite(10, LOW);
+
+  unsigned int duration = durationBottleOne;
+  if (now - startTime > duration) digitalWrite(10, LOW);
   else digitalWrite(10, HIGH);
 
-  if (now - startTime < durationBottleOne || now - startTime > durationBottleTwo) digitalWrite(11, LOW);
+  if (now - startTime < duration || now - startTime > duration + durationBottleTwo) digitalWrite(11, LOW);
   else digitalWrite(11, HIGH);
+  duration += durationBottleTwo;
 
-  if (now - startTime < durationBottleTwo || now - startTime > durationBottleThree) digitalWrite(12, LOW);
+  if (now - startTime < duration || now - startTime > duration + durationBottleThree) digitalWrite(12, LOW);
   else digitalWrite(12, HIGH);
+  duration += durationBottleThree;
 
-  if (now - startTime < durationBottleThree || now - startTime > durationBottleFour) digitalWrite(13, LOW);
+  if (now - startTime < duration || now - startTime > duration + durationBottleFour) digitalWrite(13, LOW);
   else digitalWrite(13, HIGH);
+  duration += durationBottleFour;
 
   
   if (now - startTime > cocktailDuration) {
@@ -166,17 +170,16 @@ void makeHooidriftSpecialCocktail() {
      
       int duration = random(500, 2500);
       bottleDurations[selectedBottle] = duration;
-    
-      if (duration > cocktailDuration)
-        cocktailDuration = duration;
+      cocktailDuration += duration;
     }
   }
   unsigned long now = millis();
 
+  int duration = 0;
   for (int i = 0; i < 4; i++) {
-    int duration = bottleDurations[i];
-    if (now - startTime > duration) digitalWrite(i+10, LOW);
+    if (now - startTime < duration || now - startTime > duration + bottleDurations[i]) digitalWrite(i+10, LOW);
     else digitalWrite(i+10, HIGH);
+    duration += bottleDurations[i];
   }
 
   
