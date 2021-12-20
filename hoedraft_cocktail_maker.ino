@@ -49,23 +49,31 @@ bool isMakingCocktail = false;
 void loop() {
     if (isMakingCocktail) {
         switch (index) {
-            case 0:
-                makeTemplateCocktail();
+            case 0: {
+                int durations[4] = {500, 2000, 250, 800};
+                makeCocktail(durations);
+            }
                 break;
-            case 1:
-                makeTemplateCocktail();
+            case 1: {
+                int durations[4] = {500, 2000, 250, 800};
+                makeCocktail(durations);
+            }
                 break;
-            case 2:
-                makeTemplateCocktail();
+            case 2: {
+                int durations[4] = {500, 2000, 250, 800};
+                makeCocktail(durations);
+            }
                 break;
-            case 3:
-                makeTemplateCocktail();
+            case 3: {
+                int durations[4] = {500, 2000, 250, 800};
+                makeCocktail(durations);
+            }
                 break;
             case 4:
                 makeHooidriftSpecialCocktail();
                 break;
         }
-        makeCocktail();
+        flashSelectionIndicatorLight();
     } else selection();
 
     delay(20);
@@ -114,7 +122,7 @@ void selection() {
 }
 
 
-void makeCocktail() {
+void flashSelectionIndicatorLight() {
     const long flashInterval = 1000;
 
 
@@ -133,33 +141,21 @@ void makeCocktail() {
 }
 
 
-void makeTemplateCocktail() {
-    const unsigned int durationBottleOne = 500;
-    const unsigned int durationBottleTwo = 500;
-    const unsigned int durationBottleThree = 1750;
-    const unsigned int durationBottleFour = 250;
-
+void makeCocktail(int bottleDurations[4]) {
+    int bottleCount = 4;
     if (cocktailDuration == 0) {
-        cocktailDuration = durationBottleOne + durationBottleTwo + durationBottleThree + durationBottleFour;
+        for (int i = 0; i < bottleCount; i++)
+            cocktailDuration += bottleDurations[i];
     }
     unsigned long now = millis();
 
 
-    unsigned int duration = durationBottleOne;
-    if (now - startTime > duration) digitalWrite(10, LOW);
-    else digitalWrite(10, HIGH);
-
-    if (now - startTime < duration || now - startTime > duration + durationBottleTwo) digitalWrite(11, LOW);
-    else digitalWrite(11, HIGH);
-    duration += durationBottleTwo;
-
-    if (now - startTime < duration || now - startTime > duration + durationBottleThree) digitalWrite(12, LOW);
-    else digitalWrite(12, HIGH);
-    duration += durationBottleThree;
-
-    if (now - startTime < duration || now - startTime > duration + durationBottleFour) digitalWrite(13, LOW);
-    else digitalWrite(13, HIGH);
-    duration += durationBottleFour;
+    int duration = 0;
+    for (int i = 0; i < bottleCount; i++) {
+        if (now - startTime < duration || now - startTime > duration + bottleDurations[i]) digitalWrite(i + 10, LOW);
+        else digitalWrite(i + 10, HIGH);
+        duration += bottleDurations[i];
+    }
 
 
     if (now - startTime > cocktailDuration) {
