@@ -123,21 +123,20 @@ void selection() {
 
 
 void flashSelectionIndicatorLight() {
-    const long flashInterval = 1000;
-
-
+    static const long flashInterval = 500;
     static unsigned long previousTime = 0;
     static bool isSelectedLampOn = false;
 
 
     unsigned long now = millis();
 
-    if (isSelectedLampOn) digitalWrite(index + INDEX_OFFSET, HIGH);
-    else digitalWrite(index + INDEX_OFFSET, LOW);
-
     if (now - previousTime > flashInterval) {
         isSelectedLampOn = !isSelectedLampOn;
+        previousTime = now;
     }
+
+    if (isSelectedLampOn) digitalWrite(index + INDEX_OFFSET, HIGH);
+    else digitalWrite(index + INDEX_OFFSET, LOW);
 }
 
 
